@@ -1,0 +1,123 @@
+<html>
+	<head>
+
+		<style>
+			body {
+				overflow:hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			#paddle {
+				width: 40px;
+				height: 150px;
+				position: absolute;
+				top: calc(50% - 75px);
+				left: 50px;
+				background-color: #666666;
+			}
+			#ball {
+				position: absolute;
+				top: calc(50%);
+				left: calc(50%);
+				background-color: #AA0000;	
+			}
+			#juego{
+				background-color: black;
+				height: 500px;
+				width: 1500px;
+				border: #494949 dashed 15px;
+				position: relative;
+				margin-top: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="juego">
+			<div id="paddle"><!-- paddle --></div>
+			<div id="ball"><!-- ball --></div>
+		</div><br>
+		<button id="finaliza">Salir del juego</button><!--onclick='window.location="index.html"'-->
+		
+	</body>	
+		<script>
+			const paddle = document.getElementById("paddle");
+			const ball = document.getElementById("ball");
+			const jogo = document.getElementById("juego");
+			let boton = document.getElementById("finaliza");
+			boton.onclick = function(){
+				let confirmar = confirm("Seguro que deseas acabar:");
+				if(confirmar){
+					window.location.href = "index.html";
+				}else{
+					
+				}
+			};
+			const ball_radius = window.prompt("Introduce el radio de la bola");
+			ball.style.width = 2*ball_radius + "px";
+			ball.style.height = 2*ball_radius + "px";
+			ball.style.borderRadius = ball_radius + "px";
+			
+			var velocity_x = 15;
+			var velocity_y = -15;
+
+			//Add onkeypress handler
+			let pulsar = document.addEventListener("keydown",(event)=>{setInterval(move_paddle(event),25)});
+			let parar = document.addEventListener("keyup",()=>{clearInterval(pulsar)});
+			// let parar = document.onkeyup;
+			// parar=clearInterval(pulsar);
+			// let pulsars = document.addEventListener('keydown' );
+			// document.onkeypress=move_paddle;
+			// Move ball
+			var ball_movement = setInterval(move_ball, 25);
+
+			function move_ball(){
+
+				//Check Top
+				if (ball.offsetTop  <= 0) {
+					velocity_y = -velocity_y;
+				}
+
+				//Check right
+				if (ball.offsetLeft >= (jogo.clientWidth - 2*ball_radius)) {
+					velocity_x = -velocity_x;
+				}
+
+				//Check bottom
+				if (ball.offsetTop >= (jogo.clientHeight -2*ball_radius)) {
+					velocity_y = -velocity_y;
+				}
+
+				if (ball.offsetLeft <= 90 && 
+					(ball.offsetTop >= (paddle.offsetTop-ball_radius))	&& 
+					(ball.offsetTop <= (paddle.offsetTop + 150 - ball_radius))){
+					velocity_x = -velocity_x;
+				}
+
+				//Check left
+				if (ball.offsetLeft <= 75) {
+					clearInterval(ball_movement);
+					alert ("You lose");
+					location.reload();
+				}
+
+			
+
+				
+				ball.style.top = (ball.offsetTop + velocity_y) +"px";
+				ball.style.left = (ball.offsetLeft + velocity_x) +"px";
+			
+			}
+
+			function move_paddle(pkey){
+				// console.log("tecla pulsada: " + pkey.which);  
+
+				if (pkey.which == 56){
+					paddle.style.top = (paddle.offsetTop - 10) +"px";
+				} else if (pkey.which == 50){
+					paddle.style.top = (paddle.offsetTop + 10) +"px";
+				}
+			}
+		</script>
+</html>

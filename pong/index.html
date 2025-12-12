@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario PONG</title>
+    <style>
+        div{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Configuración del Juego &#9881;</h1>
+    <form method="post" action="">
+        <label for="players">Seleccione el nº de jugadores :</label>
+        <select name="players">
+            <option value="1">1 jugador</option>
+            <option value="2">2 jugadores</option>
+        </select><br><br>
+        <label for="controller">Selecione la forma de jugar del jugador 1 :</label>
+        <select name="controller">
+            <option value="teclado">Teclado</option>
+            <option value="raton">Ratón</option>
+        </select><br><br>
+        <label>&#9888;Al jugador 2 se le asignará el control que el jugador 1 no desee&#9888;</label><br><br>
+        <label for="speed">Seleccione Velocidad de la bola :</label>
+        <select name="speed">
+            <option value="lenta">Lenta</option>
+            <option value="normal" selected>Normal</option>
+            <option value="rapida">Rápida</option>
+        </select><br><br>
+        <label for="name1">Introduzca el nombre del jugador 1 :</label>
+        <input type="text" name="name1" pattern="[A-Za-z]" required><br><br>
+        <label for="name2">Introduzca el nombre del jugador 2 :</label>
+        <input type="text" name="name2" pattern="[A-Za-z]"><br><br>
+        <input type="submit" value="enviar configuración"> <!--onclick="window.location.href='pong.html'"-->
+    </form>
+    </div>
+</body>
+</html>
