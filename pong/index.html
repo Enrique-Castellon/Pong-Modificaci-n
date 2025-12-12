@@ -13,7 +13,7 @@
 <body>
     <div>
         <h1>Configuración del Juego &#9881;</h1>
-    <form method="post" action="">
+    <form method="get" action="formulario_ctl.php">
         <label for="players">Seleccione el nº de jugadores :</label>
         <select name="players">
             <option value="1">1 jugador</option>
@@ -32,9 +32,9 @@
             <option value="rapida">Rápida</option>
         </select><br><br>
         <label for="name1">Introduzca el nombre del jugador 1 :</label>
-        <input type="text" name="name1" pattern="[A-Za-z]" required><br><br>
+        <input type="text" name="name1" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+$" required><br><br>
         <label for="name2">Introduzca el nombre del jugador 2 :</label>
-        <input type="text" name="name2" pattern="[A-Za-z]"><br><br>
+        <input type="text" name="name2" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+$"><br><br>
         <input type="submit" value="enviar configuración"> <!--onclick="window.location.href='pong.html'"-->
     </form>
     </div>
