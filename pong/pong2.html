@@ -8,13 +8,20 @@
 				align-items: center;
 				justify-content: center;
 			}
-			
-			#paddle {
+			#paddleft {
 				width: 40px;
 				height: 150px;
 				position: absolute;
 				top: calc(50% - 75px);
 				left: 50px;
+				background-color: #666666;
+			}
+			#paddleright {
+				width: 40px;
+				height: 150px;
+				position: absolute;
+				top: calc(50% - 75px);
+				right: 50px;
 				background-color: #666666;
 			}
 			#ball {
@@ -31,18 +38,44 @@
 				position: relative;
 				margin-top: 100px;
 			}
+			#puntuacion {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				text-align: center;
+				color: white;
+				display: flex;
+				justify-content: center;
+				gap: 100px;
+				
+			}
+
+				#puntuacion h3 {
+					 width: 200px;
+   					 font-size: 50px;
+					 margin: 0;
+    				line-height: 1;        
+    				text-align: center;
+				}
+
 		</style>
 	</head>
 	<body>
 		<div id="juego">
-			<div id="paddle"><!-- paddle --></div>
+			<div id="paddleft"><!-- paddle --></div>
+			<div id="paddleright"><!-- paddle --></div>
+			<div id="puntuacion">
+    			<h3 id="puntuacion-left">0</h3>
+    			<h3 id="puntuacion-right">0</h3>	
+			</div>
 			<div id="ball"><!-- ball --></div>
 		</div><br>
 		<button id="finaliza">Salir del juego</button><!--onclick='window.location="index.html"'-->
 		
 	</body>	
 		<script>
-			const paddle = document.getElementById("paddle");
+			const paddle = document.getElementById("paddleft");
+			const paddle2 = document.getElementById("paddleright");
 			const ball = document.getElementById("ball");
 			const jogo = document.getElementById("juego");
 			let boton = document.getElementById("finaliza");
@@ -78,6 +111,14 @@
 				if (ball.offsetTop  <= 0) {
 					velocity_y = -velocity_y;
 				}
+				//compribar paddle derecho
+					if (
+    				ball.offsetLeft + 2*ball_radius >= paddle2.offsetLeft &&
+    				ball.offsetTop >= paddle2.offsetTop - ball_radius &&
+    				ball.offsetTop <= paddle2.offsetTop + paddle2.offsetHeight
+					) {
+    					velocity_x = -velocity_x;
+					}
 
 				//Check right
 				if (ball.offsetLeft >= (jogo.clientWidth - 2*ball_radius)) {
@@ -88,7 +129,7 @@
 				if (ball.offsetTop >= (jogo.clientHeight -2*ball_radius)) {
 					velocity_y = -velocity_y;
 				}
-
+				//comprobar paddle izquierdo
 				if (ball.offsetLeft <= 90 && 
 					(ball.offsetTop >= (paddle.offsetTop-ball_radius))	&& 
 					(ball.offsetTop <= (paddle.offsetTop + 150 - ball_radius))){
