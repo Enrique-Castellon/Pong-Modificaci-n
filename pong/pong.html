@@ -30,12 +30,35 @@
 				border: #494949 dashed 15px;
 				position: relative;
 				margin-top: 100px;
+				overflow: hidden;
+			} 
+			#puntuacion {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				text-align: center;
+				color: white;
+				display: flex;
+				justify-content: center;
+				gap: 100px;
+				
 			}
+			#puntuacion h3 {
+					width: 200px;
+   					font-size: 50px;
+					margin: 0;
+    				line-height: 1;        
+    				text-align: center;
+				}
 		</style>
 	</head>
 	<body>
 		<div id="juego">
 			<div id="paddle"><!-- paddle --></div>
+			<div id="puntuacion">
+				<h3 id="nombre"></h3>
+    			<h3 id="puntuacio">0</h3>	
+			</div>
 			<div id="ball"><!-- ball --></div>
 		</div><br>
 		<button id="finaliza">Salir del juego</button><!--onclick='window.location="index.html"'-->
@@ -46,6 +69,23 @@
 			const ball = document.getElementById("ball");
 			const jogo = document.getElementById("juego");
 			let boton = document.getElementById("finaliza");
+			let puntu = document.getElementById("puntuacio"); 
+			//Me permite pillar los elementos por queryStrings;
+			let parametros = new URLSearchParams(window.location.search);
+			let name = parametros.get("nombre");
+			let nombre = document.getElementById("nombre");
+			let control = parametros.get("control");
+			let cont = 0;
+			let speed = parametros.get("velocidad");
+			let velocity;
+			if(speed=="lenta"){
+				velocity=5;
+			}else if(speed=="normal"){
+				velocity=15;
+			}else{
+				velocity=23;
+			}
+			nombre.textContent=name;
 			boton.onclick = function(){
 				let confirmar = confirm("Seguro que deseas acabar:");
 				if(confirmar){
@@ -59,8 +99,8 @@
 			ball.style.height = 2*ball_radius + "px";
 			ball.style.borderRadius = ball_radius + "px";
 			
-			var velocity_x = 15;
-			var velocity_y = -15;
+			var velocity_x = velocity;
+			var velocity_y = -velocity;
 
 			//Add onkeypress handler
 			let pulsar = document.addEventListener("keydown",(event)=>{setInterval(move_paddle(event),25)});
@@ -82,6 +122,8 @@
 				//Check right
 				if (ball.offsetLeft >= (jogo.clientWidth - 2*ball_radius)) {
 					velocity_x = -velocity_x;
+					cont+=1;
+					puntu.textContent=cont;
 				}
 
 				//Check bottom
@@ -96,10 +138,8 @@
 				}
 
 				//Check left
-				if (ball.offsetLeft <= 75) {
-					clearInterval(ball_movement);
-					alert ("You lose");
-					location.reload();
+				if (ball.offsetLeft <= 10) {
+					velocity_x = -velocity_x;
 				}
 
 			

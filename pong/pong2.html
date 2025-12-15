@@ -37,6 +37,7 @@
 				border: #494949 dashed 15px;
 				position: relative;
 				margin-top: 100px;
+				overflow: hidden;
 			}
 			#puntuacion {
 				position: absolute;
@@ -49,15 +50,21 @@
 				gap: 100px;
 				
 			}
-
-				#puntuacion h3 {
-					 width: 200px;
-   					 font-size: 50px;
-					 margin: 0;
+			#puntuacion h3 {
+					width: 200px;
+   					font-size: 50px;
+					margin: 0;
     				line-height: 1;        
     				text-align: center;
 				}
-
+			#linea-central{
+				border: #494949 dashed 15px; 
+    			position: absolute;
+   	 			top: 0;
+    			left: 50%;
+    			height: 100%;
+    			width: 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -65,9 +72,12 @@
 			<div id="paddleft"><!-- paddle --></div>
 			<div id="paddleright"><!-- paddle --></div>
 			<div id="puntuacion">
+				<h3 id="nombre1"></h3>
     			<h3 id="puntuacion-left">0</h3>
-    			<h3 id="puntuacion-right">0</h3>	
+    			<h3 id="puntuacion-right">0</h3>
+				<h3 id="nombre2"></h3>	
 			</div>
+			<div id="linea-central"></div>
 			<div id="ball"><!-- ball --></div>
 		</div><br>
 		<button id="finaliza">Salir del juego</button><!--onclick='window.location="index.html"'-->
@@ -79,6 +89,28 @@
 			const ball = document.getElementById("ball");
 			const jogo = document.getElementById("juego");
 			let boton = document.getElementById("finaliza");
+			let puntu1 = document.getElementById("puntuacion-left");
+			let puntu2 = document.getElementById("puntuacion-right");
+			let cont1 = 0;
+			let cont2 = 0; 
+			//Me permite pillar los elementos por queryStrings;
+			let parametros = new URLSearchParams(window.location.search);
+			let name1 = parametros.get("nombre1");
+			let control = parametros.get("control");
+			let name2 = parametros.get("nombre2");
+			let name3 = document.getElementById("nombre1");
+			let name4 = document.getElementById("nombre2");
+			name3.textContent=name1;
+			name4.textContent=name2;
+			let speed = parametros.get("velocidad");
+			let velocity;
+			if(speed=="lenta"){
+				velocity=5;
+			}else if(speed=="normal"){
+				velocity=15;
+			}else{
+				velocity=23;
+			}
 			boton.onclick = function(){
 				let confirmar = confirm("Seguro que deseas acabar:");
 				if(confirmar){
@@ -91,9 +123,8 @@
 			ball.style.width = 2*ball_radius + "px";
 			ball.style.height = 2*ball_radius + "px";
 			ball.style.borderRadius = ball_radius + "px";
-			
-			var velocity_x = 15;
-			var velocity_y = -15;
+			var velocity_x = velocity;
+			var velocity_y = -velocity;
 
 			//Add onkeypress handler
 			let pulsar = document.addEventListener("keydown",(event)=>{setInterval(move_paddle(event),25)});
@@ -111,7 +142,7 @@
 				if (ball.offsetTop  <= 0) {
 					velocity_y = -velocity_y;
 				}
-				//compribar paddle derecho
+				//comprobar paddle derecho
 					if (
     				ball.offsetLeft + 2*ball_radius >= paddle2.offsetLeft &&
     				ball.offsetTop >= paddle2.offsetTop - ball_radius &&
@@ -123,6 +154,8 @@
 				//Check right
 				if (ball.offsetLeft >= (jogo.clientWidth - 2*ball_radius)) {
 					velocity_x = -velocity_x;
+					cont1+=1;
+					puntu1.textContent=cont1;
 				}
 
 				//Check bottom
@@ -137,18 +170,13 @@
 				}
 
 				//Check left
-				if (ball.offsetLeft <= 75) {
-					clearInterval(ball_movement);
-					alert ("You lose");
-					location.reload();
-				}
-
-			
-
-				
+				if (ball.offsetLeft <= 10) {
+					velocity_x = -velocity_x;
+					cont2+=1;
+					puntu2.textContent=cont2;
+				}				
 				ball.style.top = (ball.offsetTop + velocity_y) +"px";
 				ball.style.left = (ball.offsetLeft + velocity_x) +"px";
-			
 			}
 
 			function move_paddle(pkey){

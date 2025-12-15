@@ -7,9 +7,9 @@
     $playerTwo = $_GET['name2'];
 
     if($jugadores==1){
-        header("Location: pong.html?control=".$control.",velocidad=".$velocidad.",nombre=".$playerOne);
+        header("Location: pong.html?control=".$control."&velocidad=".$velocidad."&nombre=".$playerOne);
     }else{
-        header("Location: pong2.html?control=".$control.",velocidad=".$velocidad.",nombre1=".$playerOne.",nombre2=".$playerTwo);
+        header("Location: pong2.html?control=".$control."&velocidad=".$velocidad."&nombre1=".$playerOne."&nombre2=".$playerTwo);
     }
 exit();
 
