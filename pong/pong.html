@@ -94,6 +94,14 @@
 					
 				}
 			};
+			let sube;
+			let baja;
+			let subir;
+			let bajar;
+			if(control=="teclado"){
+				sube = window.prompt("Que tecla quieres usar para subir");
+				baja = window.prompt("Que tecla quieres usar para bajar");
+			}
 			const ball_radius = window.prompt("Introduce el radio de la bola");
 			ball.style.width = 2*ball_radius + "px";
 			ball.style.height = 2*ball_radius + "px";
@@ -109,6 +117,7 @@
 			// parar=clearInterval(pulsar);
 			// let pulsars = document.addEventListener('keydown' );
 			// document.onkeypress=move_paddle;
+
 			// Move ball
 			var ball_movement = setInterval(move_ball, 25);
 
@@ -151,13 +160,16 @@
 			}
 
 			function move_paddle(pkey){
-				// console.log("tecla pulsada: " + pkey.which);  
-
-				if (pkey.which == 56){
+				console.log("tecla pulsada: " + pkey.which);  
+				console.log(sube +"y"+ baja);
+				if (pkey.which == sube){
 					paddle.style.top = (paddle.offsetTop - 10) +"px";
-				} else if (pkey.which == 50){
+				} else if (pkey.which == baja){
 					paddle.style.top = (paddle.offsetTop + 10) +"px";
 				}
+			}
+			function move_paddle_raton(mov){
+
 			}
 		</script>
 </html>
