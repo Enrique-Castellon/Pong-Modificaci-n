@@ -1,0 +1,192 @@
+<html>
+	<head>
+
+		<style>
+			body {
+				overflow:hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			#paddleft {
+				width: 40px;
+				height: 150px;
+				position: absolute;
+				top: calc(50% - 75px);
+				left: 50px;
+				background-color: #666666;
+			}
+			#paddleright {
+				width: 40px;
+				height: 150px;
+				position: absolute;
+				top: calc(50% - 75px);
+				right: 50px;
+				background-color: #666666;
+			}
+			#ball {
+				position: absolute;
+				top: calc(50%);
+				left: calc(50%);
+				background-color: #AA0000;	
+			}
+			#juego{
+				background-color: black;
+				height: 500px;
+				width: 1500px;
+				border: #494949 dashed 15px;
+				position: relative;
+				margin-top: 100px;
+				overflow: hidden;
+			}
+			#puntuacion {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				text-align: center;
+				color: white;
+				display: flex;
+				justify-content: center;
+				gap: 100px;
+				
+			}
+			#puntuacion h3 {
+					width: 200px;
+   					font-size: 50px;
+					margin: 0;
+    				line-height: 1;        
+    				text-align: center;
+				}
+			#linea-central{
+				border: #494949 dashed 15px; 
+    			position: absolute;
+   	 			top: 0;
+    			left: 50%;
+    			height: 100%;
+    			width: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="juego">
+			<div id="paddleft"><!-- paddle --></div>
+			<div id="paddleright"><!-- paddle --></div>
+			<div id="puntuacion">
+				<h3 id="nombre1"></h3>
+    			<h3 id="puntuacion-left">0</h3>
+    			<h3 id="puntuacion-right">0</h3>
+				<h3 id="nombre2"></h3>	
+			</div>
+			<div id="linea-central"></div>
+			<div id="ball"><!-- ball --></div>
+		</div><br>
+		<button id="finaliza">Salir del juego</button><!--onclick='window.location="index.html"'-->
+		
+	</body>	
+		<script>
+			const paddle = document.getElementById("paddleft");
+			const paddle2 = document.getElementById("paddleright");
+			const ball = document.getElementById("ball");
+			const jogo = document.getElementById("juego");
+			let boton = document.getElementById("finaliza");
+			let puntu1 = document.getElementById("puntuacion-left");
+			let puntu2 = document.getElementById("puntuacion-right");
+			let cont1 = 0;
+			let cont2 = 0; 
+			//Me permite pillar los elementos por queryStrings;
+			let parametros = new URLSearchParams(window.location.search);
+			let name1 = parametros.get("nombre1");
+			let control = parametros.get("control");
+			let name2 = parametros.get("nombre2");
+			let name3 = document.getElementById("nombre1");
+			let name4 = document.getElementById("nombre2");
+			name3.textContent=name1;
+			name4.textContent=name2;
+			let speed = parametros.get("velocidad");
+			let velocity;
+			if(speed=="lenta"){
+				velocity=5;
+			}else if(speed=="normal"){
+				velocity=15;
+			}else{
+				velocity=23;
+			}
+			boton.onclick = function(){
+				let confirmar = confirm("Seguro que deseas acabar:");
+				if(confirmar){
+					window.location.href = "index.html";
+				}else{
+					
+				}
+			};
+			const ball_radius = window.prompt("Introduce el radio de la bola");
+			ball.style.width = 2*ball_radius + "px";
+			ball.style.height = 2*ball_radius + "px";
+			ball.style.borderRadius = ball_radius + "px";
+			var velocity_x = velocity;
+			var velocity_y = -velocity;
+
+			//Add onkeypress handler
+			let pulsar = document.addEventListener("keydown",(event)=>{setInterval(move_paddle(event),25)});
+			let parar = document.addEventListener("keyup",()=>{clearInterval(pulsar)});
+			// let parar = document.onkeyup;
+			// parar=clearInterval(pulsar);
+			// let pulsars = document.addEventListener('keydown' );
+			// document.onkeypress=move_paddle;
+			// Move ball
+			var ball_movement = setInterval(move_ball, 25);
+
+			function move_ball(){
+
+				//Check Top
+				if (ball.offsetTop  <= 0) {
+					velocity_y = -velocity_y;
+				}
+				//comprobar paddle derecho
+					if (
+    				ball.offsetLeft + 2*ball_radius >= paddle2.offsetLeft &&
+    				ball.offsetTop >= paddle2.offsetTop - ball_radius &&
+    				ball.offsetTop <= paddle2.offsetTop + paddle2.offsetHeight
+					) {
+    					velocity_x = -velocity_x;
+					}
+
+				//Check right
+				if (ball.offsetLeft >= (jogo.clientWidth - 2*ball_radius)) {
+					velocity_x = -velocity_x;
+					cont1+=1;
+					puntu1.textContent=cont1;
+				}
+
+				//Check bottom
+				if (ball.offsetTop >= (jogo.clientHeight -2*ball_radius)) {
+					velocity_y = -velocity_y;
+				}
+				//comprobar paddle izquierdo
+				if (ball.offsetLeft <= 90 && 
+					(ball.offsetTop >= (paddle.offsetTop-ball_radius))	&& 
+					(ball.offsetTop <= (paddle.offsetTop + 150 - ball_radius))){
+					velocity_x = -velocity_x;
+				}
+
+				//Check left
+				if (ball.offsetLeft <= 10) {
+					velocity_x = -velocity_x;
+					cont2+=1;
+					puntu2.textContent=cont2;
+				}				
+				ball.style.top = (ball.offsetTop + velocity_y) +"px";
+				ball.style.left = (ball.offsetLeft + velocity_x) +"px";
+			}
+
+			function move_paddle(pkey){
+				// console.log("tecla pulsada: " + pkey.which);  
+
+				if (pkey.which == 56){
+					paddle.style.top = (paddle.offsetTop - 10) +"px";
+				} else if (pkey.which == 50){
+					paddle.style.top = (paddle.offsetTop + 10) +"px";
+				}
+			}
+		</script>
+</html>
