@@ -45,10 +45,10 @@
 			}
 			#puntuacion h3 {
 					width: 200px;
-   					font-size: 50px;
+					font-size: 50px;
 					margin: 0;
-    				line-height: 1;        
-    				text-align: center;
+					line-height: 1;        
+					text-align: center;
 				}
 		</style>
 	</head>
@@ -57,7 +57,7 @@
 			<div id="paddle"><!-- paddle --></div>
 			<div id="puntuacion">
 				<h3 id="nombre"></h3>
-    			<h3 id="puntuacio">0</h3>	
+				<h3 id="puntuacio">0</h3>	
 			</div>
 			<div id="ball"><!-- ball --></div>
 		</div><br>
@@ -100,11 +100,15 @@
 			let bajar;
 			let raton;
 			if(control=="teclado"){
-				sube = Number(window.prompt("Que tecla quieres usar para subir"));
-				baja = Number(window.prompt("Que tecla quieres usar para bajar"));
-			}
-				
-			
+				sube = String(window.prompt("Que tecla quieres usar para subir"));
+				baja = String(window.prompt("Que tecla quieres usar para bajar"));
+				//Add onkeypress handler
+			let pulsar = document.addEventListener("keydown",(event)=>{setInterval(()=>move_paddle(event),25)});
+			let parar = document.addEventListener("keyup",()=>{clearInterval(pulsar)});
+			}else{
+				//movimiento raton
+				raton=document.addEventListener("mousemove", move_paddle_raton(event));
+			}			
 			const ball_radius = window.prompt("Introduce el radio de la bola");
 			ball.style.width = 2*ball_radius + "px";
 			ball.style.height = 2*ball_radius + "px";
@@ -112,12 +116,7 @@
 			
 			var velocity_x = velocity;
 			var velocity_y = -velocity;
-
-			//Add onkeypress handler
-			let pulsar = document.addEventListener("keydown",(event)=>{setInterval(()=>move_paddle(event),25)});
-			let parar = document.addEventListener("keyup",()=>{clearInterval(pulsar)});
-			//movimiento raton
-			raton=document.addEventListener("mousemove", move_paddle_raton(event));
+			
 			// let parar = document.onkeyup;
 			// parar=clearInterval(pulsar);
 			// let pulsars = document.addEventListener('keydown' );
@@ -164,9 +163,9 @@
 			function move_paddle(pkey){
 				console.log("tecla pulsada: " + pkey.which);  
 				console.log(sube +"y"+ baja);
-				if (pkey.which == sube){
+				if (pkey.key == sube){
 					paddle.style.top = (paddle.offsetTop - 10) +"px";
-				} else if (pkey.which == baja){
+				} else if (pkey.key == baja){
 					paddle.style.top = (paddle.offsetTop + 10) +"px";
 				}
 			}
