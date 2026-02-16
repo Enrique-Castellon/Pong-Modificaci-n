@@ -1,6 +1,5 @@
 <html>
 	<head>
-
 		<style>
 			body {
 				overflow:hidden;
@@ -103,13 +102,19 @@
 			name3.textContent=name1;
 			name4.textContent=name2;
 			let speed = parametros.get("velocidad");
-			let velocity;
+			let velocity; 
+			let sube;
+			let baja;
+			let subir;
+			let bajar;
+			let raton; 
+			let teclaActual; 
 			if(speed=="lenta"){
 				velocity=5;
 			}else if(speed=="normal"){
 				velocity=15;
 			}else{
-				velocity=23;
+				velocity=25;
 			}
 			boton.onclick = function(){
 				let confirmar = confirm("Seguro que deseas acabar:");
@@ -126,9 +131,25 @@
 			var velocity_x = velocity;
 			var velocity_y = -velocity;
 
+			if(control=='teclado'){ 
+				sube = window.prompt("Que tecla quieres usar para subir").toLowerCase();
+				baja = window.prompt("Que tecla quieres usar para bajar").toLowerCase();
+				let pulsar = document.addEventListener("keydown",(event)=>{ 
+				teclaActual = event;
+				intervalo=setInterval(()=>move_paddle(teclaActual),5)});
+				let parar = document.addEventListener("keyup",()=>{clearInterval(intervalo)}); 
+				raton=document.addEventListener("mousemove", (event) => move_paddle_raton2(event));
+			}else if (control=='raton'){ 
+				sube = window.prompt("Que tecla quieres usar para subir").toLowerCase();
+				baja = window.prompt("Que tecla quieres usar para bajar").toLowerCase();
+				let pulsar = document.addEventListener("keydown",(event)=>{ 
+				teclaActual = event;
+				intervalo=setInterval(()=>move_paddle2(teclaActual),5)});
+				let parar = document.addEventListener("keyup",()=>{clearInterval(intervalo)}); 
+				raton=document.addEventListener("mousemove", (event) => move_paddle_raton(event));
+			}
 			//Add onkeypress handler
-			let pulsar = document.addEventListener("keydown",(event)=>{setInterval(move_paddle(event),25)});
-			let parar = document.addEventListener("keyup",()=>{clearInterval(pulsar)});
+			
 			// let parar = document.onkeyup;
 			// parar=clearInterval(pulsar);
 			// let pulsars = document.addEventListener('keydown' );
@@ -176,16 +197,60 @@
 					puntu2.textContent=cont2;
 				}				
 				ball.style.top = (ball.offsetTop + velocity_y) +"px";
-				ball.style.left = (ball.offsetLeft + velocity_x) +"px";
+				ball.style.left = (ball.offsetLeft + velocity_x) +"px"; 
+				
 			}
 
 			function move_paddle(pkey){
-				// console.log("tecla pulsada: " + pkey.which);  
-
-				if (pkey.which == 56){
-					paddle.style.top = (paddle.offsetTop - 10) +"px";
-				} else if (pkey.which == 50){
-					paddle.style.top = (paddle.offsetTop + 10) +"px";
+				const paddleTop = paddle.offsetTop;
+				const paddleHeight = paddle.offsetHeight;
+				const containerHeight = paddle.parentElement.offsetHeight;
+				console.log("tecla pulsada: " + pkey.which);  
+				console.log(sube +"y"+ baja);
+				if (pkey.key == sube ){
+					if (paddleTop > 0) {
+						paddle.style.top = Math.max(paddleTop - 10, 0) + "px";
+					}
+					// paddle.style.top = (paddle.offsetTop - 10) +"px";
+				} else if (pkey.key == baja){
+					// paddle.style.top = (paddle.offsetTop + 10) +"px"; 
+					if (paddleTop + paddleHeight < containerHeight) {
+            			paddle.style.top = Math.min(paddleTop + 10, containerHeight - paddleHeight) + "px";
+        			}
+				}
+			}  
+			function move_paddle_raton(mov){
+			let paddleCenter = paddle.offsetTop + paddle.offsetHeight / 2;
+			if (mov.clientY < paddleCenter) {
+				paddle.style.top = (paddle.offsetTop - 10) + "px";
+			}else if (mov.clientY > paddleCenter) {	
+				paddle.style.top = (paddle.offsetTop + 10) + "px";
+				}
+			}
+			function move_paddle2(pkey){
+				const paddleTop = paddle2.offsetTop;
+				const paddleHeight = paddle2.offsetHeight;
+				const containerHeight = paddle2.parentElement.offsetHeight;
+				console.log("tecla pulsada: " + pkey.which);  
+				console.log(sube +"y"+ baja);
+				if (pkey.key == sube ){
+					if (paddleTop > 0) {
+						paddle2.style.top = Math.max(paddleTop - 10, 0) + "px";
+					}
+					// paddle.style.top = (paddle.offsetTop - 10) +"px";
+				} else if (pkey.key == baja){
+					// paddle.style.top = (paddle.offsetTop + 10) +"px"; 
+					if (paddleTop + paddleHeight < containerHeight) {
+            			paddle2.style.top = Math.min(paddleTop + 10, containerHeight - paddleHeight) + "px";
+        			}
+				}
+			} 
+			function move_paddle_raton2(mov){
+			let paddleCenter = paddle2.offsetTop + paddle2.offsetHeight / 2;
+			if (mov.clientY < paddleCenter) {
+				paddle2.style.top = (paddle2.offsetTop - 10) + "px";
+			}else if (mov.clientY > paddleCenter) {	
+				paddle2.style.top = (paddle2.offsetTop + 10) + "px";
 				}
 			}
 		</script>

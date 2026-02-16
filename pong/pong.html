@@ -98,16 +98,19 @@
 			let baja;
 			let subir;
 			let bajar;
-			let raton;
+			let raton; 
+			let teclaActual; 
 			if(control=="teclado"){
-				sube = String(window.prompt("Que tecla quieres usar para subir"));
-				baja = String(window.prompt("Que tecla quieres usar para bajar"));
-				//Add onkeypress handler
-			let pulsar = document.addEventListener("keydown",(event)=>{setInterval(()=>move_paddle(event),25)});
-			let parar = document.addEventListener("keyup",()=>{clearInterval(pulsar)});
+				sube = window.prompt("Que tecla quieres usar para subir").toLowerCase();
+				baja = window.prompt("Que tecla quieres usar para bajar").toLowerCase();
+			//Add onkeypress handler
+			let pulsar = document.addEventListener("keydown",(event)=>{ 
+				teclaActual = event;
+				intervalo=setInterval(()=>move_paddle(teclaActual),5)});
+			let parar = document.addEventListener("keyup",()=>{clearInterval(intervalo)});
 			}else{
 				//movimiento raton
-				raton=document.addEventListener("mousemove", move_paddle_raton(event));
+				raton=document.addEventListener("mousemove", (event) => move_paddle_raton(event));
 			}			
 			const ball_radius = window.prompt("Introduce el radio de la bola");
 			ball.style.width = 2*ball_radius + "px";
@@ -115,19 +118,14 @@
 			ball.style.borderRadius = ball_radius + "px";
 			
 			var velocity_x = velocity;
-			var velocity_y = -velocity;
-			
-			// let parar = document.onkeyup;
-			// parar=clearInterval(pulsar);
-			// let pulsars = document.addEventListener('keydown' );
-			// document.onkeypress=move_paddle;
+			var velocity_y = -velocity; 
 
 			// Move ball
 			var ball_movement = setInterval(move_ball, 25);
 
 			function move_ball(){
 
-				//Check Top
+				//Check Top 
 				if (ball.offsetTop  <= 0) {
 					velocity_y = -velocity_y;
 				}
@@ -159,23 +157,32 @@
 				ball.style.left = (ball.offsetLeft + velocity_x) +"px";
 			
 			}
-
-			function move_paddle(pkey){
+			//funciones movimiento
+			function move_paddle(pkey){ 
+				const paddleTop = paddle.offsetTop;
+				const paddleHeight = paddle.offsetHeight;
+				const containerHeight = paddle.parentElement.offsetHeight;
 				console.log("tecla pulsada: " + pkey.which);  
 				console.log(sube +"y"+ baja);
-				if (pkey.key == sube){
-					paddle.style.top = (paddle.offsetTop - 10) +"px";
+				if (pkey.key == sube ){
+					if (paddleTop > 0) {
+						paddle.style.top = Math.max(paddleTop - 10, 0) + "px";
+					}
+					// paddle.style.top = (paddle.offsetTop - 10) +"px";
 				} else if (pkey.key == baja){
-					paddle.style.top = (paddle.offsetTop + 10) +"px";
+					// paddle.style.top = (paddle.offsetTop + 10) +"px"; 
+					if (paddleTop + paddleHeight < containerHeight) {
+            			paddle.style.top = Math.min(paddleTop + 10, containerHeight - paddleHeight) + "px";
+        			}
 				}
 			}
 			function move_paddle_raton(mov){
 			let paddleCenter = paddle.offsetTop + paddle.offsetHeight / 2;
-    		if (mov.clientY < paddleCenter) {
-        		paddle.style.top = (paddle.offsetTop - 10) + "px";
-			}else if (mov.clientY > paddleCenter) {
-            	paddle.style.top = (paddle.offsetTop + 10) + "px";
-    			}
+			if (mov.clientY < paddleCenter) {
+				paddle.style.top = (paddle.offsetTop - 10) + "px";
+			}else if (mov.clientY > paddleCenter) {	
+				paddle.style.top = (paddle.offsetTop + 10) + "px";
+				}
 			}
 		</script>
 </html>
